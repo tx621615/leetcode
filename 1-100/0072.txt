@@ -1,0 +1,32 @@
+72.编辑距离
+class Solution {
+    public int minDistance(String word1, String word2) {
+        //dp[i][j] = min(dp[i][j - 1] + 1, dp[i - 1][j] + 1, dp[i - 1][j - 1] + 0 or 1)
+        //为什么只有这三种情况，一是操作顺序可以交换，那么只要你在末尾修改，无论是哪一步，都可以移到最后，而如果你不在末尾修改这就是dp[i - 1][j - 1] + 0这种情况，可以在末尾插入，删除，修改三种情况
+        int m = word1.length();
+        int n = word2.length();
+        if(m * n == 0)
+        {
+            return m > n ? m : n;
+        }
+        int[][] dp = new int[m + 1][n + 1];
+        for(int i = 0; i <= m; i++)
+        {
+            dp[i][0] = i;
+        }
+        for(int j = 0; j <= n; j++)
+        {
+            dp[0][j] = j;
+        }
+        for(int i = 1; i <= m; i++)
+            for(int j = 1; j <= n; j++)
+            {
+                int l = word1.charAt(i - 1) == word2.charAt(j - 1) ? 0 : 1;
+                dp[i][j] = Math.min(dp[i][j - 1] + 1,Math.min(dp[i - 1][j] + 1, dp[i - 1][j - 1] + l));
+            }
+        return dp[m][n];
+    }
+}
+
+
+现在问题是如何判断何时用DP

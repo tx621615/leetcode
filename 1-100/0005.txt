@@ -1,0 +1,85 @@
+class Solution {
+    public String longestPalindrome(String s) {
+        int length = 0;
+        int n = 0;
+        int maxi = 0;
+        for(int i = 0; i < s.length(); i++)
+        {   
+            //找到每个字符起始的最长回文串，然后在比较各个起始位置
+            for(int j = s.length() - 1; j >= i; j--)
+            {   
+                //只对大于当前长度的串进行验证
+                if(j - i + 1 < length)
+                    break;
+                else{
+                    if(isPalindrome(s, i, j))
+                    {
+                        n = j - i + 1;
+                        break;
+                    }
+                }    
+            }
+            if(length < n)
+            {
+                maxi = i;
+                length = n;
+            }
+        }
+
+        return s.substring(maxi, maxi + length);
+    }
+
+    //每个字符开始都检查最长回文串。
+public boolean isPalindrome(String s, int i, int j)
+{
+    for(; i <= j;i++, j--)
+    {
+        if(s.charAt(i) != s.charAt(j))
+            return false;
+    }
+    return true;
+}
+}
+
+class Solution {
+    public String longestPalindrome(String s) {
+        //dp数组定义是否为回文串dp[i][j] = dp[i+1][j-1] && （s[i] == s[j]）; 
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+        if(n < 2) return s;
+        //初始化dp数组, j >= i
+        for(int i = 0; i < n; i++)
+        {
+            dp[i][i] = true;
+        }
+       //两种初始状态
+        for(int i = 0; i < n - 1; i++)
+        {   
+            if(s.charAt(i) == s.charAt(i + 1))
+                dp[i][i + 1] = true;
+            else
+                dp[i][i + 1] = false;
+        }
+        //构造整个dp数组--之前的已经被计算了，注意必须要从j开始，从i开始的话，之前的状态未被计算
+        for(int j = 1; j < n; j++)
+            for(int i = 0; j - i > 1; i++)
+            {
+                dp[i][j] = (s.charAt(i) == s.charAt(j)) && dp[i + 1][j - 1];
+            }
+            int maxlength = 0;
+            int maxi = 0;
+            for(int j = 0; j < n; j++)
+                for(int i = 0; i <= j; i++)
+                {
+                    if(dp[i][j])
+                    {   
+                        if(maxlength < j - i + 1)
+                        {
+                            maxlength = j - i + 1;
+                            maxi = i;
+                        } 
+                    }
+                }
+        return s.substring(maxi, maxlength + maxi);
+    }
+}
