@@ -1,0 +1,47 @@
+class Solution {
+    public int myAtoi(String s) {
+        //去掉空格--ascii码--32
+        int ans = 0;
+        int i = 0;
+        char c;
+
+        if(s == null)
+            return 0;
+        for(; i < s.length(); i++)
+        {   
+            if(s.charAt(i) != 32)
+                break;
+        }
+        if(i == s.length())  //去除空串和只有空格的串
+            return 0;
+        boolean flag = false;
+        c = s.charAt(i);
+        if(c > 57 || (c < 48 && c != 43 && c != 45))
+            return 0;
+        if(c == '+')
+            i++;
+        if(c == '-')
+        {
+            flag = true;
+            i++;
+        }
+        while(i < s.length())
+        {   
+            c = s.charAt(i);
+            if(c < 48 || c > 57) 
+                break;
+            int pop;
+            if(flag)
+                pop = '0' - c;
+            else
+                pop = c - '0';
+            if(ans > Integer.MAX_VALUE / 10 || ans == Integer.MAX_VALUE / 10 && pop > 7)
+                return Integer.MAX_VALUE;
+            if(ans < Integer.MIN_VALUE / 10 || ans == Integer.MIN_VALUE / 10 && pop < -8)
+                return Integer.MIN_VALUE;
+            ans = ans * 10 + pop;
+            i++;
+        }
+        return ans;       
+    }
+}
