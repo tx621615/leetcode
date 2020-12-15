@@ -1,0 +1,35 @@
+9. 回文数
+int类型可以直接计算--将其倒过来的数算出来再判断是否相等--没考虑溢出情况，但是如果是回文串那么不可能会溢出，如果不是回文串，那么溢出的数会是负数因此也不可能等于该数，
+因此不判断溢出也是可以的。
+注意int数据反转可能出现溢出情况，尽管在该题溢出也正确
+但是要想到这种情况
+
+更牛逼的方法考虑一半的数
+public boolean isPalindrome(int x) {
+        if(x < 0) return false;
+        int ans = 0;
+        int temp = x;
+        while(x != 0)
+        {
+            int pop = x % 10;
+            x = x / 10;
+            ans = ans * 10 + pop;
+            
+        }
+        return ans == temp;
+    }
+
+
+
+ //反转一半可以不用判断溢出
+        if(x < 0 || x % 10 == 0 && x != 0) return false;
+        int ans = 0;
+        while(true)
+        {
+            int pop = x % 10;
+            ans = ans * 10 + pop;
+            if(x / 10 <= ans)    //只反转一半的条件
+                break;
+            x = x / 10;    
+        }
+        return ans == x || ans == x / 10;

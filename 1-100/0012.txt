@@ -1,0 +1,35 @@
+12. 整数转罗马数字
+//关键是HashTable能否转化为数组（一个）进行映射-----比如只是读取第一次保存的内容，而不是要进行修改，那么就可以考虑使用数组，使用HashTable可能要考虑修改才使用。
+//关键2是如何将复杂的条件判断转化为不断循环做同一件事，比如同样是得到各个位--一个考虑除法，一个考虑的是不断相减（这样就不会通过取余进行复杂判断了）
+//数字计算中除了取余可以得到各个位（而且只能尾部数字），除法（假如知道总共位数）也可以得到各个位（而且可以同时得到），减法（可以从高位到低位不断得到）
+
+
+class Solution {
+    public String intToRoman(int num) {
+    //通过数组名字以及数组下标和内容的映射---避免使用HashTable
+    String[] thousands = {"", "M", "MM", "MMM"};
+    String[] hundreds = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"}; 
+    String[] tens = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+    String[] ones = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+    
+    //关键在于如何获得各个位，而不需要if,while复杂的判断
+    //通过除法可以发现num到底会被不会大于1000等
+    return thousands[num / 1000] + hundreds[num % 1000 / 100] + tens[num % 100 / 10] + ones[num % 10];
+    }
+}
+
+
+//记录所有的双字符和单字符，并且按大小进行排序，
+    //通过不断相减来不断添加--因为转化必须从最大开始判起
+    int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+    String[]  s = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < values.length; i++)
+    {
+        while(num >= values[i])
+        {
+            num -= values[i];
+            sb.append(s[i]);
+        }
+    }
+    return sb.toString();

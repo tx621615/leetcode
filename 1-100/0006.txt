@@ -1,0 +1,20 @@
+6. Z 字形变换--------代码的写法技巧
+class Solution {
+    public String convert(String s, int numRows) {
+        int n = numRows * 2 - 2;
+        if(numRows < 2) return s;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < numRows; i++)
+        {
+            //for的作用时提供某个数（可能并不为1）的倍数，其次for可以一次性做多个事情（特别是只有两个特殊的时候）,一次添加两个，特别是一次添加一个不能（较麻烦）时
+	//两个for循环在分组的经典用法（按某一个大小进行分组）
+            for(int j = 0; j + i < s.length(); j += n) 
+            {
+                sb.append(s.charAt(j + i));
+                if(i != 0 && i != numRows - 1 && j + n - i < s.length())
+                    sb.append(s.charAt(j + n - i));
+            }
+        }
+        return sb.toString();
+    }
+}

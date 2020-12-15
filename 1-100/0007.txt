@@ -1,0 +1,73 @@
+class Solution {
+    public int reverse(int x) {
+        long l = x;
+        boolean flag = false;
+        if(l < 0)
+        {
+            l = -l;
+            flag = true;
+        } 
+        Long i = new Long(l);
+        StringBuilder sb = new StringBuilder(i.toString());
+        if(flag)
+        {
+            sb.append('-');
+        }
+        sb.reverse();
+        Long r = new Long(sb.toString());
+        if(r < -2147483648l || r > 2147483648l)
+            return 0;
+        int j = (int) r.longValue();
+        return j;
+    }
+}
+
+class Solution {
+    public int reverse(int x) {
+        char[] num = new char[11];
+        if(x == -2147483648)  //此时x = - x还是原来的负数，因为无法表示2147483648这个数
+            return 0;
+        if(x < 0)
+        {
+            num[0] = '-';
+            x = -x;-------------
+        }    
+        else 
+        {
+            num[0] = '0';
+        }    
+        int l;
+        int i;
+        for(i = 1; i < 11; i++)
+        {
+            l = x % 10;
+            x = x / 10;
+            num[i] = (char)('0' + l);
+            if(x == 0)
+                break;
+        }
+        String s = new String(num, 0, i + 1);
+        Long k = new Long(s);
+        if(k < -2147483648l || k > 2147483647l)
+            return 0;
+        return (int)k.longValue();
+    }
+}
+
+//直接计算的方法
+class Solution {
+    public int reverse(int x) {
+        int ans = 0;
+        while (x != 0) {   //对任意十进制数的循环计算
+            int pop = x % 10;
+            if (ans > Integer.MAX_VALUE / 10 || (ans == Integer.MAX_VALUE / 10 && pop > 7))  //不能真等到溢出在计算，可以在溢出前进行计算
+                return 0;
+            if (ans < Integer.MIN_VALUE / 10 || (ans == Integer.MIN_VALUE / 10 && pop < -8)) 
+                return 0;
+            ans = ans * 10 + pop;
+            x /= 10;
+        }
+        return ans;
+    }
+}
+//求反转还可以使用栈
