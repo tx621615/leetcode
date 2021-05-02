@@ -1,0 +1,91 @@
+101. 对称二叉树
+//经典的对称问题，双指针，很类似于数组回文等问题（对称问题可以考虑生成两个东西，然后比较）
+//广度优先
+//一次压两个进队列，一次弹两个，关键是null也要压入，像这种左右结构（左对应左或者左对应右）问题，关键是要把空结点也算入，空结点在这里起到占位作用
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        return check(root, root);
+    }
+
+    public boolean check(TreeNode u, TreeNode v) {
+        Queue<TreeNode> q = new LinkedList<TreeNode>();
+        q.offer(u);
+        q.offer(v);
+        while (!q.isEmpty()) {
+            u = q.poll();
+            v = q.poll();
+            if (u == null && v == null) {
+                continue;
+            }
+            if ((u == null || v == null) || (u.val != v.val)) {
+                return false;
+            }
+
+            q.offer(u.left);
+            q.offer(v.right);
+
+            q.offer(u.right);
+            q.offer(v.left);
+        }
+        return true;
+    }
+}
+
+作者：LeetCode-Solution
+链接：https://leetcode-cn.com/problems/symmetric-tree/solution/dui-cheng-er-cha-shu-by-leetcode-solution/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+//深度优先遍历（先序）
+//思路：两个指针相反运行（类似双指针求回文串），如果不等return false.
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root == null) return true;
+        Stack<TreeNode> stack = new Stack();
+        Stack<TreeNode> stack1 = new Stack();
+        TreeNode q = root;
+        TreeNode p = root;
+        while(p != null || stack.isEmpty() != true)
+        {
+            if(p != null)
+            {
+                if(q == null) return false;
+                if(p.val != q.val) return false;
+                stack.push(p);
+                stack1.push(q);
+                p = p.left;
+                q= q.right;
+            }
+            else
+            {
+                if(q != null) return false;
+                p = stack.pop();
+                q = stack1.pop();
+                p = p.right;
+                q = q.left;
+            }
+        }
+        return true;
+    }
+}
+
+//递归写法--如何生成递归，如果一个原本的问题不好生成递归，那么可以采用解的推论，看其是否能生成递归
+//一颗树是否为镜像可以转化为其左右子树是否为镜像，为就是
+//那么如何判断两个树是否为镜像呢？ 第一根节点的值相同，第二第一颗左子树是第二棵右子树的镜像，第一棵右子树是左子树的镜像。
+//思考：从一棵树转化为两棵树（实际是两个指针）
+//递归--从一棵树转化为两棵树
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        return check(root, root);   //可以直接从root判断，如果root是对称树的话，那么相当于两个指针好像是两棵树，事实上问题还可以转化为，如果一棵树是对称树，那么必然会和自己对称，否则不对称。
+    }
+
+    public boolean check(TreeNode p, TreeNode q) {   //判断两棵树是否为镜像
+        if (p == null && q == null) {
+            return true;
+        }
+        if (p == null || q == null) {
+            return false;
+        }
+        return p.val == q.val && check(p.left, q.right) && check(p.right, q.left);
+    }
+}

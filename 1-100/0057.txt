@@ -1,0 +1,144 @@
+57. 插入区间
+思路：找到自己的插入位置，然后一个个插入。
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        ArrayList<int[]> res= new ArrayList<>();
+        if(intervals == null || intervals.length == 0)
+        {
+            res.add(newInterval);
+            return res.toArray(new int[0][2]);
+        }
+        int flag = 0;
+        for(int i = 0;i < intervals.length; i++)
+        {
+            if(intervals[i][0] <= newInterval[0])
+            {
+                res.add(intervals[i]);
+            }
+            else
+            {
+                if(flag == 0)
+                {
+                    if(res.size() == 0)
+                    {
+                        res.add(newInterval);
+                    }
+                    if(newInterval[0] <= res.get(res.size() - 1)[1])
+                    {
+                        res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], newInterval[1]);
+                    }
+                    else
+                    {
+                        res.add(newInterval);
+                    }
+                    flag = 1;
+                }
+                if(flag == 1)
+                {
+                    if(intervals[i][0] <= res.get(res.size() - 1)[1])
+                    {
+                        res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], intervals[i][1]);
+                    }
+                    else
+                    {
+                        res.add(intervals[i]);
+                    }
+                }
+
+            }
+        }
+        if(flag == 0)
+        {
+            if(res.size() == 0)
+                    {
+                        res.add(newInterval);
+                    }
+                    if(newInterval[0] <= res.get(res.size() - 1)[1])
+                    {
+                        res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], newInterval[1]);
+                    }
+                    else
+                    {
+                        res.add(newInterval);
+                    }
+        }
+        return res.toArray(new int[0][2]);
+
+    }
+}
+
+//找到插入位置，然后一个个插入。
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        LinkedList<int[]> res= new LinkedList<>();
+        LinkedList<int[]> temp = new LinkedList<>();
+        if(intervals == null || intervals.length == 0)
+        {
+            res.add(newInterval);
+            return res.toArray(new int[0][2]);
+        }
+        for(int i = 0;i < intervals.length;i++)
+        {
+            if(intervals[i][0] <= newInterval[0])
+            {
+                res.add(intervals[i]);
+            }
+            else
+            {
+                temp.add(intervals[i]);
+            }
+        }
+        temp.addFirst(newInterval);
+        if(res.size() == 0){
+            res.add(temp.poll());
+        }
+        for(int[] t: temp)
+        {
+            if(t[0] <= res.get(res.size() - 1)[1])
+            {
+                res.get(res.size() - 1)[1] = Math.max(res.get(res.size() - 1)[1], t[1]);
+            }
+            else
+            {
+                res.add(t);
+            }
+        }
+        return res.toArray(new int[0][2]);
+    }
+}
+
+//思路：如果区间right<new[0]，那么可以直接加入，如果区间left > new[0]，那么可以直接加入，如果有重叠，那么先不加入，而是更新new[0],new[1]，即扩大区间
+那么什么时候加入呢？等到第一个left > right时，加入一次，之后则不会加入，所以用了一个判断。还有一种情况是left >right不出现，那么也要用标志位重新加入。
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        int left = newInterval[0];
+        int right = newInterval[1];
+        boolean placed = false;
+        List<int[]> ansList = new ArrayList<int[]>();
+        for (int[] interval : intervals) {
+            if (interval[0] > right) {
+                // 在插入区间的右侧且无交集
+                if (!placed) {
+                    ansList.add(new int[]{left, right});
+                    placed = true;                    
+                }
+                ansList.add(interval);
+            } else if (interval[1] < left) {
+                // 在插入区间的左侧且无交集
+                ansList.add(interval);
+            } else {
+                // 与插入区间有交集，计算它们的并集
+                left = Math.min(left, interval[0]);
+                right = Math.max(right, interval[1]);
+            }
+        }
+        if (!placed) {
+            ansList.add(new int[]{left, right});
+        }
+        int[][] ans = new int[ansList.size()][2];
+        for (int i = 0; i < ansList.size(); ++i) {
+            ans[i] = ansList.get(i);
+        }
+        return ans;
+    }
+}

@@ -1,0 +1,93 @@
+73.矩阵置0
+1.O(m+n)
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int[] rows = new int[m];
+        int[] cols = new int[n];
+        for(int i = 0;i < m; i++)
+        {
+            for(int j = 0;j < n;j++)
+            {
+                if(matrix[i][j] == 0)
+                {
+                    rows[i] = 1;
+                    cols[j] = 1;
+                }
+            }
+        }
+        for(int i = 0;i < m;i++)
+        {
+            if(rows[i] == 1)
+            {
+                for(int j = 0;j < n; j++)
+                    matrix[i][j] = 0;
+            }
+        }
+        for(int i = 0;i < n;i++)
+        {
+            if(cols[i] == 1)
+            {
+                for(int j = 0;j < m; j++)
+                    matrix[j][i] = 0;
+            }
+        }
+    }
+}
+
+2.O（1）空间复杂度，使用原来第一行和第一列来存储(除第一行和第一列的矩阵的为0的标记内容)，因为第一行和第一列的内容会被修改，所以要先区别原来的0和修改后的0
+class Solution {
+    public void setZeroes(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int rowflag = 0;
+        int colflag = 0;
+        for(int i = 0;i < n;i++)
+        {
+            if(matrix[0][i] == 0)
+                rowflag = 1;
+        }
+        for(int i = 0;i < m;i++)
+        {
+            if(matrix[i][0] == 0)
+                colflag = 1;
+        }
+        for(int i = 1;i < m; i++)
+        {
+            for(int j = 1;j < n;j++)
+            {
+                if(matrix[i][j] == 0)
+                {
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
+                }
+            }
+        }
+        //清0，根据一行一列清除
+        for(int i = 1;i < m;i++)
+            for(int j = 1;j < n;j++)
+            {
+                if(matrix[i][0] == 0 || matrix[0][j] == 0)
+                {
+                    matrix[i][j] = 0;
+                }
+            }
+        //原来是否有0，如果没有的话，那么一行一列已经完成了，因为把对应的0设置好了，其他不是0的也不用改动
+        if(rowflag == 1)
+        {
+            for(int i = 0;i < n; i++)
+            {
+                matrix[0][i] = 0;
+            }
+        }
+        if(colflag == 1)
+        {
+            for(int i = 0;i < m; i++)
+            {
+                matrix[i][0] = 0;
+            }
+        }
+        
+    }
+}

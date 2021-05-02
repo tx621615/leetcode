@@ -1,0 +1,75 @@
+103. 二叉树的锯齿形层序遍历 使用链表的方法更优秀
+1.数组反转
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        //思路就是层次遍历，然后偶数层次反转
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        if(root == null) return res;
+        int flag = 1;
+        queue.add(root);
+        while(queue.isEmpty() == false)
+        {
+            int size = queue.size();
+            ArrayList<Integer> array = new ArrayList<>();
+            while(size > 0)
+            {
+                TreeNode temp = queue.poll();
+                array.add(temp.val);
+                if(temp.left != null)
+                {
+                    queue.add(temp.left);
+                }
+                if(temp.right != null)
+                {
+                    queue.add(temp.right);
+                }
+                size--;
+            }
+            if(flag % 2 == 0) Collections.reverse(array);
+            flag++;
+            res.add(array);
+        }
+        return res;
+    }
+}
+2.双端队列保存每一行的值（利用了链表头插的反转性质）
+双端队列可以使用LinkedList实现
+其实就是双向链表，奇数尾插，偶数头插。
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        //思路就是层次遍历，然后偶数层次反转
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new LinkedList<>();
+        if(root == null) return res;
+        int flag = 1;
+        queue.add(root);
+        while(queue.isEmpty() == false)
+        {
+            int size = queue.size();
+            LinkedList<Integer> array = new LinkedList<>();
+            while(size > 0)
+            {
+                TreeNode temp = queue.poll();
+                if(flag % 2 == 0)
+                {
+                    array.offerFirst(temp.val);
+                }else{
+                    array.offer(temp.val);
+                }
+                if(temp.left != null)
+                {
+                    queue.add(temp.left);
+                }
+                if(temp.right != null)
+                {
+                    queue.add(temp.right);
+                }
+                size--;
+            }
+            flag++;
+            res.add(array);
+        }
+        return res;
+    }
+}

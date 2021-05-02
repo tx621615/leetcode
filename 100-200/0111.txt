@@ -1,0 +1,14 @@
+1.二叉树的最小深度
+解决树一般就是bfs,dfs
+dfs方法，递归的思想，主要注意当左右子树有一个为null的情况单独讨论
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root == null) return 0;
+        if(root.left == null && root.right == null) return 1;
+        int left = root.left == null ? Integer.MAX_VALUE:minDepth(root.left) + 1;
+        int right = root.right == null ? Integer.MAX_VALUE:minDepth(root.right) + 1;
+        return left < right ? left : right;
+    }
+}
+bfs
+思路：高度最小的叶子结点必然第一个被访问到，所以层次遍历即可，定义一个全局变量记录高度。

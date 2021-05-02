@@ -1,0 +1,161 @@
+ 1.基本二分查找
+1 int BinarySearch(int a[],int size,int key)
+ 2 {
+ 3     int left = 0, right = size - 1;
+ 4     while (left <= right)
+ 5     {
+ 6         int mid = left + (right - left) / 2;
+ 7         if (a[mid] == key) return mid;
+ 8         else if (a[mid] < key) left = mid + 1;
+ 9         else right = mid - 1;
+10     }
+11     return -1;
+12 }
+
+2.二分法查找变种
+一、查找第一个与key相等的元素(key相等的可能很多)
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] >= key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        if(left <= right && array[left] == key)
+        {
+            return left;
+        }
+        return -1;
+    }
+}
+
+二、查找最后一个与key相等的元素
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] > key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        if(right >= 0 && array[right] == key)
+        {
+            return right;
+        }
+        return -1;
+    }
+}
+
+三、查找最后一个小于等于key的元素
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] > key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        
+    }
+    return right;
+}
+
+四、查找最后一个小于key的元素
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] >= key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        
+    }
+    return right;
+}
+
+五、查找第一个大于等于key的元素
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] >= key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        
+    }
+    return left;
+}
+
+六、查找第一个大于key的元素
+int BinarySearch(int array[],int size,int key)
+{
+    int left = 0,right = size - 1;
+    while(left <= right)
+    {
+        int mid = left + (right - left) / 2;
+        if(array[mid] > key)
+        {
+            right = mid - 1;
+        }
+        else
+        {
+            left = mid + 1;
+        }
+        
+    }
+    return left;
+}
+
+总结
+注意框架
+while (left <= right) {
+    int mid = (left + right) / 2;
+    if (array[mid] ? key) {
+        //... right = mid - 1;
+    }
+    else {
+        // ... left = mid + 1;
+    }
+}
+return xxx;
+
+1.第一个,left
+2.最后一个,right
+3.关于等于加在哪个地方，（多个元素，合并=，然后检查），（小于和等于的区别，符合条件的在一起，不符合条件的排除）
+4.查到了下标，但是还要检查下标。
+
+     
+

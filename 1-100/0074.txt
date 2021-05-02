@@ -1,0 +1,80 @@
+74. 搜索二维矩阵
+1.二维数组每行有序，行之间递增
+有序数组，一般要利用这个性质快速排除一些选项，因此要注意与哪个参考数字比，可以快速排除。
+这里选的是最左下的数。
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int i = matrix.length - 1;
+        int j = 0;
+        while(i >= 0 && j < matrix[0].length)
+        {
+            if(matrix[i][j] == target)
+            {
+                return true;
+            }
+            else if(matrix[i][j] < target)
+            {
+                j = j + 1;
+            }
+            else
+            {
+                i = i - 1;
+                
+            }
+        }
+        return false;
+    }
+}
+
+2.二分查找
+查找最后一个小于等于key的二分法的写法，返回-1表示没有一个，因此直接false即可
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length - 1;
+        int n = matrix[0].length - 1;
+        int row = colSearch(matrix,target);
+        return rowSearch(matrix, target, row);
+        
+    }
+
+    public boolean rowSearch(int[][] matrix, int target, int row)
+    {
+        if(row == -1) return false;
+        int start = 0;
+        int end = matrix[0].length - 1;
+        while(start <= end)
+        {
+            int mid = (start + end) / 2;
+            if(matrix[row][mid] == target) return true;
+            else if(matrix[row][mid] > target)
+            {
+                end = mid - 1;
+            }
+            else
+            {
+                start = mid + 1;
+            }
+        }
+        return false;
+    }
+
+    public int colSearch(int[][] matrix, int target)
+    {
+        int start = 0;
+        int end = matrix.length - 1;
+        while(start <= end)
+        {
+            int mid = (start + end) / 2;
+            if(matrix[mid][0] > target)
+            {
+                end = mid - 1;
+            }
+            else
+            {
+                start = mid + 1;
+            }
+        }
+        return end;
+
+    }
+}

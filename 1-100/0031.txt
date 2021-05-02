@@ -1,0 +1,54 @@
+31. 下一个排列
+思路：
+从左边找到一个较小数，从右边找到一个较大数，交换两者，即可以得到一个更大的数
+如何得到一个最接近的大数呢？
+1.较小数要靠右---影响的最高位要低（在低位操作，显然变化幅度比高位操作更小）
+2.较大数要尽可能小---变化范围小
+两者交换后，还要在较小位置后一位到最后一位升序排序，这是大数中的最小数
+
+思想（套路）
+如何找较小数（不是最小）--因为找到的最小不能确定一定是在左边，找较小则可以确定，又有点像极值和最小数的区别（局部和整体区别）
+相邻的比较就可以找到
+class Solution {
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        int j = nums.length - 1;
+        while(i >= 0 && nums[i] >= nums[i + 1])  //如果while中if判断无内容执行，则可以将if条件并入while中，同时对条件取反----if不做任何事，可以与while合并条件
+        {
+            i--;
+        }
+/* while(i >= 0)
+        {
+            if(nums[i] < nums[i + 1])
+            {
+                flag = false;
+                break;
+            }
+            i--;
+        }*/  ---合并后
+        if(i >= 0)
+        {
+            while(j > i && nums[i] >= nums[j])  //如果while中if判断无内容执行，则可以将if条件并入while中，同时对条件取反
+            {
+                j--;   //注意此时i + 1---最后为逆序，所以只要找到第一个大于的即为最小大于的
+            }
+            swap(nums, i, j);
+        }
+        reverse(nums, i + 1);  //注意全部逆序的时候也可以调用这个，此时i = -1
+    }
+
+     public void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    public void reverse(int[] nums, int start) {
+        int left = start, right = nums.length - 1;
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+}

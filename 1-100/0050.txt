@@ -1,0 +1,97 @@
+50. Pow(x, n)
+问题1：n可能为负数，此时将x转化为1/x，让n尽量为正数
+1.思路一，暴力法，超时
+class Solution {
+    public double myPow(double x, int n) {
+        if(n < 0)
+        {
+            x = 1/x;
+            n = -n;
+        }
+        if(n == 1) return x;
+        double res = 1;
+        for(int i = 0;i < n; i++)
+        {
+            res *= x;
+        }
+        return res;
+    }
+}
+
+2.二分法--递归，超时
+class Solution {
+    public double myPow(double x, int n) {
+        if(n < 0)
+        {
+            x = 1/x;
+            n = -n;
+        }
+        if(n == 0) return 1.0;
+        if(n == 1) return x;
+        //double res = 1;
+        if(n % 2 == 0) return myPow(x, n/2) * myPow(x, n/2);
+        else return x * myPow(x, n/2) * myPow(x, n/2);
+    }
+}
+
+//如果有多个同样的递归的表达式话，应该将返回值记录，这样就不用每个函数都递归从而导致时间复杂度超时。
+class Solution {
+    public double myPow(double x, int n) {
+       long N = n;
+       return N > 0?help(x, N) :help(1/x, -N);
+    }
+
+    public double help(double x, long n)
+    {
+        if(n == 0) return 1.0;
+        double y = help(x, n/2);
+        if(n % 2 == 0) return y * y;
+        else return x * y * y;
+    }
+}
+3.每次乘法的基数其实可以计算出来，这样只要最多32次就可以了
+class Solution {
+    public double myPow(double x, int n) {
+        
+        if(n == Integer.MIN_VALUE && x == 1.0) return 1.0;
+        if(n == Integer.MIN_VALUE && x == -1.0) return 1.0;
+        if(n == Integer.MIN_VALUE) return 0.0;
+        if(n < 0)
+        {
+            x = 1/x;
+            n = -n;
+        }
+        double res = 1.0;
+        for(;n > 0;x *= x)
+        {
+            if((n & 1) == 1)
+            {
+                res *= x;
+            }
+            n >>= 1;
+        }
+        return res;
+    }
+}
+
+4.修改版本，采用long避免Integer.MIN_VALUE的情况
+class Solution {
+    public double myPow(double x, int n) {
+        long N = n;  //一定要先保存为long，因为之后调用-n的时候如果直接使用-n其正数无法保证，因此要使用-N.
+        return N > 0? help(x, N):help(1/x, -N);
+    }
+
+    public double help(double x, long n)
+    {
+        double res = 1.0;
+        for(;n > 0;x *= x)
+        {
+            if((n & 1) == 1)
+            {
+                res *= x;
+            }
+            n = n / 2;
+        }
+        return res;
+    }
+}

@@ -1,0 +1,102 @@
+39. 组合总和
+情况是---可以挑选重复元素，因此还是可以从自己开始
+//错误情况
+dfs递归中再次使用了start，此时应该使用i,这是因为start不会变，但是i确会变
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // Arrays.sort(candidates);
+        dfs(new ArrayList<Integer>(), candidates, 0, target);
+        return res;
+    }
+
+    public void dfs(ArrayList<Integer> route, int[] candidates, int start, int target)
+    {
+        if(target == 0)
+        {
+            Collections.sort(route);
+            if(!res.contains(route))
+                res.add(new ArrayList<>(route));
+            return;
+        }
+        if(target < 0)
+        {
+            return;
+        }
+
+        for(int i = start;i<candidates.length;i++)
+        {
+            route.add(candidates[i]);
+            dfs(route, candidates, start, target - candidates[i]);
+            route.remove(route.size() - 1);
+
+        }
+    }
+}
+
+正确
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        // Arrays.sort(candidates);
+        dfs(new ArrayList<Integer>(), candidates, 0, target);
+        return res;
+    }
+
+    public void dfs(ArrayList<Integer> route, int[] candidates, int start, int target)
+    {
+        if(target == 0)
+        {
+            res.add(new ArrayList<>(route));
+            return;
+        }
+        if(target < 0)
+        {
+            return;
+        }
+
+        for(int i = start;i<candidates.length;i++)
+        {
+            route.add(candidates[i]);
+            dfs(route, candidates, i, target - candidates[i]);
+            route.remove(route.size() - 1);
+
+        }
+    }
+}
+
+剪枝情况//一般数组必须排序有规律
+在添加之前先判断，如果<0则该枝不变添加，同时之后的所有元素也可以不用添加了（因为元素只会更大）
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        dfs(new ArrayList<Integer>(), candidates, 0, target);
+        return res;
+    }
+
+    public void dfs(ArrayList<Integer> route, int[] candidates, int start, int target)
+    {
+        if(target == 0)
+        {
+            res.add(new ArrayList<>(route));
+            return;
+        }
+        if(target < 0)
+        {
+            return;
+        }
+
+        for(int i = start;i<candidates.length;i++)
+        {
+            if(target - candidates[i] < 0)
+            {
+                break;
+            }
+            route.add(candidates[i]);
+            dfs(route, candidates, i, target - candidates[i]);
+            route.remove(route.size() - 1);
+
+        }
+    }
+}

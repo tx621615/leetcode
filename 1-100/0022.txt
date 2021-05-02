@@ -1,0 +1,86 @@
+22.括号生成
+
+回溯法的主要套路就是：
+
+1.判断是否达到返回结果的条件，达到则直接返回
+2.添加某个值
+3.递归
+4.删除某个值
+
+回溯法
+
+巧妙的添加手段，使得添加的内容必然符合条件。而且覆盖了所有添加正确的情况。这样可以避免穷举所有排列。即是穷举所有正确的排列。
+正确的添加手段
+1.只要左括号没有达到n，那么就必然可以添加到末尾，且不会破坏正确性。
+2.右括号只有在数目小于左括号的情况下才能添加到末尾。
+3.结束条件
+
+思路：如果添加的内容可以列举（重复且少量）的话，不论是此题的左右括号还是树的root.left,root.right，都不需要构建selector数组,也不用for循环，但可能需要if判断，来进行一些添加的trick。
+class Solution {
+    List<String> res = new ArrayList<>();
+    public List<String> generateParenthesis(int n) {
+        StringBuilder sb = new StringBuilder("");
+        help(0,0,sb,n);
+        return res;
+    }
+
+    public void help(int l,int r,StringBuilder sb, int n)
+    {
+        if(l == n && r == n)
+        {
+            res.add(sb.toString());
+            return;
+        }
+        if(l < n)
+        {
+            sb.append("(");
+            help(l+1,r,sb,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if(r < l)
+        {
+            sb.append(")");
+            help(l, r+1,sb,n);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+    }
+}
+
+暴力法：本质还是回溯方法，本质还是穷举，只不过添加一个2n的数组，然后可以加(，也可以加)，每个都可以加2n个，然后检查有效性。
+注意判断括号匹配的方法，通过一个balance值来判断，比起栈来判断简单许多。
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> combinations = new ArrayList<String>();
+        generateAll(new char[2 * n], 0, combinations);
+        return combinations;
+    }
+
+    public void generateAll(char[] current, int pos, List<String> result) {
+        if (pos == current.length) {
+            if (valid(current)) {
+                result.add(new String(current));
+            }
+        } else {
+            current[pos] = '(';
+            generateAll(current, pos + 1, result);
+            current[pos] = ')';
+            generateAll(current, pos + 1, result);
+        }
+    }
+
+    public boolean valid(char[] current) {
+        int balance = 0;
+        for (char c: current) {
+            if (c == '(') {
+                ++balance;
+            } else {
+                --balance;
+            }
+            if (balance < 0) {
+                return false;
+            }
+        }
+        return balance == 0;
+    }
+}

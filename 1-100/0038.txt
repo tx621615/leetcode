@@ -1,0 +1,82 @@
+38. 外观数列
+关键：如何计算相同数目字符的个数，结束条件如何使用
+法一：i - start
+法二：i/i+1,count  i/i-1 count
+第一个想法：递归
+思想一：通过前后两个字符不等作为结束条件，count统计单词个数。
+class Solution {
+    public String countAndSay(int n) {
+        if(n == 1) return "1";
+        String before = countAndSay(n - 1);
+        char[] charsequence = before.toCharArray();
+        int i = 0;
+        int length = charsequence.length;
+        int count = 0;
+        StringBuilder sb = new StringBuilder();
+        for(;i < length; i++)
+        {
+            count++; 
+            if((i + 1) == length)
+            {
+                sb.append("" + count);
+                sb.append(charsequence[i]);
+            }
+            if((i + 1) < length && charsequence[i] != charsequence[i + 1])
+            {
+                sb.append("" + count);
+                sb.append(charsequence[i]);
+                count = 0;
+            }
+        }
+        return sb.toString();
+    }
+}
+
+//改进，消除了对i + 1的判断
+思想二：通过记录每个start位置，然后查找到与其不等的时候的位置i, i - start就是个数，最后一个数单独处理
+class Solution {
+    public String countAndSay(int n) {
+        // 递归终止条件
+        if (n == 1) {
+            return "1";
+        }
+        // 获取到上一层的字符串
+        String s = countAndSay(n - 1);
+        StringBuilder result = new StringBuilder();
+        // 记录每个数字的开始索引
+        int start = 0;
+        for (int i = 1; i < s.length(); i++) {
+            // 当数字发生改变时执行
+            if (s.charAt(i) != s.charAt(start)) {
+                result.append(i - start).append(s.charAt(start));
+                start = i;
+            }
+        }
+        // 字符串最后一个数字
+        result.append(s.length() - start).append(s.charAt(start));
+        return result.toString();
+    }
+}
+
+//通过i - 1也可以省去条件的判断
+class Solution {
+    public String countAndSay(int n) {
+        if(n == 1) return "1";
+        String before = countAndSay(n - 1);
+        int count = 1;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1;i < before.length(); i++)
+        {
+            if(before.charAt(i) != before.charAt(i - 1))
+            {
+                sb.append(count).append(before.charAt(i - 1));
+                count = 0;
+            }
+            count++;
+        }
+        sb.append(count).append(before.charAt(before.length() - 1));
+        return sb.toString();
+    }
+}
+
+

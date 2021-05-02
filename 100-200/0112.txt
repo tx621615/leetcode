@@ -1,0 +1,44 @@
+112. 路径总和
+第一种写法最好（空间复杂度少）
+public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root == null) return false;
+        if(root.left == null && root.right == null) 
+        {
+            if(root.val == targetSum) return true;
+            else return false;
+        }
+        boolean flag = false;
+        boolean flag1 = false;
+        if(root.left != null)  //等于null的时候不用调用了
+            flag = hasPathSum(root.left, targetSum - root.val);
+        if(root.right != null)
+            flag1 = hasPathSum(root.right, targetSum - root.val);
+        return flag || flag1;
+}
+
+public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root == null) return false;
+        if(root.left == null && root.right == null) 
+        {
+            return root.val == targetSum;
+        }
+        return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+
+public boolean hasPathSum(TreeNode root, int targetSum) {
+        if(root == null) return false;
+        if(root.left == null && root.right == null) 
+        {
+           return  root.val == targetSum;
+        }
+        boolean flag = false;
+        boolean flag1 = false;
+        if(root.left != null)
+            flag = hasPathSum(root.left, targetSum - root.val);
+        if(root.right != null)
+            flag1 = hasPathSum(root.right, targetSum - root.val);
+        return flag || flag1;
+}
+
+广度优先遍历
+两个队列，一个队列保存结点，一个队列保存到这个结点的值（结点入队以及计算到该结点的路径然后入队）

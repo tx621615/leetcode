@@ -1,0 +1,67 @@
+54.螺旋数组
+总体思路就是：先访问外层，再访问内层，不过可以把递归转为迭代。
+二维数组需要4个指针来表示范围
+1.递归，先加入两行两列，然后递归调用，最后到一行或者一列的情况
+2.注意：三者不能同时满足，因为只有一个元素的话，可能会加入多次
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        LinkedList<Integer> res = new LinkedList<>();
+        if(matrix == null || matrix.length == 0) return res;
+        help(res,matrix,0,matrix.length - 1,0, matrix[0].length - 1);
+        return res;
+    }
+
+    public void help(List<Integer> res, int[][] matrix, int rows, int rowe, int cols, int cole){
+        if(rows > rowe || cols > cole) return;
+        if(rows == rowe)
+        {
+            for(int i = cols;i <= cole; i++)
+                res.add(matrix[rows][i]);
+        }
+        else if(cols == cole)
+        {
+            for(int i = rows;i <= rowe; i++)
+                res.add(matrix[i][cols]);
+        }
+        else{
+            for(int i = cols;i <= cole; i++)
+            res.add(matrix[rows][i]);
+            for(int i = rows + 1;i <= rowe; i++)
+                res.add(matrix[i][cole]);
+            for(int i = cole - 1;i >= cols; i--)
+                res.add(matrix[rowe][i]);
+            for(int i = rowe - 1;i >= rows + 1; i--)
+                res.add(matrix[i][cols]);
+        }
+        
+        help(res, matrix, rows + 1, rowe - 1, cols + 1, cole - 1);
+    }
+}
+
+2.上面判断的优化,因为最上面或者最右侧的两行肯定都会遍历到，只有下面两行可能不会遍历，因此把条件整合。
+更优的做法：把递归转化为迭代，条件是rows<=rowe,cols<=cole.
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        LinkedList<Integer> res = new LinkedList<>();
+        if(matrix == null || matrix.length == 0) return res;
+        help(res,matrix,0,matrix.length - 1,0, matrix[0].length - 1);
+        return res;
+    }
+
+    public void help(List<Integer> res, int[][] matrix, int rows, int rowe, int cols, int cole){
+        if(rows > rowe || cols > cole) return;
+        for(int i = cols;i <= cole; i++)
+            res.add(matrix[rows][i]);
+        for(int i = rows + 1;i <= rowe; i++)
+            res.add(matrix[i][cole]);
+        if(rows < rowe && cols < cole)
+        {
+            for(int i = cole - 1;i >= cols; i--)
+                res.add(matrix[rowe][i]);
+            for(int i = rowe - 1;i >= rows + 1; i--)
+                res.add(matrix[i][cols]);
+        }
+           
+        help(res, matrix, rows + 1, rowe - 1, cols + 1, cole - 1);
+    }
+}

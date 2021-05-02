@@ -1,0 +1,29 @@
+56. 合并区间
+思路:按左节点排序后，然后插入合并
+排序后判断是否重叠更加简单，因为可以很好的获得max(min)，后一个区间的最小值必定大于前一个区间最小值，所以只要比较其和前一个区间的最大即可。
+如果次一个区间不能与前一个区间合并，那么其余所有区间必然不能和前一个区间合并，所以只要依次检查就可以了。
+class Solution {
+    public int[][] merge(int[][] intervals) { 
+       Arrays.sort(intervals, (interval1, interval2)->{return interval1[0]-interval2[0];   //comparator的正确写法
+        });
+       List<int[]> merged = new ArrayList<int[]>();		//数组作为List元素的写法
+       merged.add(new int[]{intervals[0][0], intervals[0][1]});
+       for(int i = 1;i < intervals.length;i++)
+       {
+           int min = intervals[i][0];
+           int max = merged.get(merged.size() - 1)[1];
+           if(min <= max)
+           {
+                if(max <= intervals[i][1])
+                    merged.get(merged.size() - 1)[1] = intervals[i][1];
+                
+           }
+           else
+            merged.add(intervals[i]);
+       }
+        return merged.toArray(new int[merged.size()][]);
+
+    }
+
+    
+}

@@ -1,0 +1,29 @@
+19. 删除链表的倒数第N个节点
+关键点：
+1.头结点（哑结点，dummy node）的申请--使得删除第一个结点也不再特殊
+2.如何在单链表找到该结点-----从头开始找---不知道长度----双指针，一个指针先走n获得该链表长度---快慢指针
+
+另一种解法：栈--保存所有节点，然后弹出n个结点，这个方法有点浪费空间。
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        //双指针，先走n步然后再走length - n 步
+        //头结点--使得第一个结点不在特殊
+        ListNode first = new ListNode(0, head);
+        ListNode p = head;
+        ListNode q = first;
+        ListNode l = head;
+        for(int i = 0; i < n; i++)
+        {
+            l = l.next;
+        }
+        while(l != null)
+        {
+            p = p.next;
+            q = q.next;
+            l = l.next;
+        }
+        q.next = p.next;
+        p.next = null;
+        return first.next;
+    }
+}

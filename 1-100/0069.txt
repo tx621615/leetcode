@@ -1,0 +1,123 @@
+69. x 的平方根
+//注意必须把所有值都转化为long,否则计算的时候容易（mid * mid当mid较大时候）超出，使得值出现错误
+法1：先指数后线性
+public static  int mySqrt(int x){
+        if(x == 0) return 0;
+        long value = x;
+        long n = 1;
+        long res = 0;
+        //先指数增长
+        while((value - n * n) > 0)
+        {
+            res = n;
+            n = n * 3;
+        }
+        if((value - n * n) == 0) return (int)n;
+        //后线性
+        while((value - res * res) > 0)
+        {
+            res = res + 1;
+        }
+        if((value - res * res) == 0) return (int)res;
+        else return (int)(res - 1);
+    }
+
+法2：先指数后二分
+public static  int mySqrt(int x){
+        if(x == 0) return 0;
+        long value = x;
+        long n = 1;
+        long res = 0;
+        //先指数增长
+        while((value - n * n) > 0)
+        {
+            res = n;
+            n = n * 2;
+        }
+        if((value - n * n) == 0) return (int)n;
+        //后二分搜索
+        long low = res;
+        long high = n;
+        long mid = 0;
+        long len = 0;
+        while (low <= high) {
+            mid = (low + high) / 2;
+            len = value - mid * mid;
+            if (len == 0) {
+                return (int)mid;
+            } else if (len < 0) {
+                high = mid - 1;
+            } else {
+                long len1 = x - (mid + 1) * (mid + 1);
+                if (len1 > 0)
+                    low = mid + 1;
+                else {
+                    if (len1 == 0)
+                        return (int)(mid + 1);
+                    else
+                        return (int)mid;
+                }
+            }
+        }
+        return (int)mid;
+    }
+
+//直接二分也可以
+public static  int mySqrt(int x){
+        if(x == 0) return 0;
+        //后二分搜索
+        long value = x;
+        long low = 1;
+        long high = 50000;  //保证最大值都存在
+        long mid = 0;
+        long len = 0;
+        while (low <= high) {
+            mid = (low + high) / 2;
+            len = value - mid * mid;
+            if (len == 0) {
+                return (int)mid;
+            } else if (len < 0) {
+                high = mid - 1;
+            } else {
+                long len1 = x - (mid + 1) * (mid + 1);
+                if (len1 > 0)
+                    low = mid + 1;
+                else {
+                    if (len1 == 0)
+                        return (int)(mid + 1);
+                    else
+                        return (int)mid;
+                }
+            }
+        }
+        return -1;  //肯定能找到
+    }
+
+//题解，用于优化，使用指数和对数求，但计算有一定误差，所以最后还要判断一下
+x(1/2) = e(1/2lnx)
+class Solution {
+    public static  int mySqrt(int x){
+        if (x == 0) {
+            return 0;
+        }
+        int ans = (int) Math.exp(0.5 * Math.log(x));
+        return (long) (ans + 1) * (ans + 1) <= x ? ans + 1 : ans;
+    }
+}
+
+
+//提交二分查找，代码更简洁，但效率和自己写的一致
+思路，只要小于等于都是需要的，所以进行记录，相当于不断更新，找到那个更加逼近的值。
+public int mySqrt(int x) {
+        int l = 0, r = x, ans = -1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            if ((long) mid * mid <= x) {
+                ans = mid;
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return ans;
+    }

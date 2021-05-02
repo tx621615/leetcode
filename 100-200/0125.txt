@@ -1,0 +1,61 @@
+125. 验证回文串
+//双指针法，注意字母不区分大小写，只要验证low<=high的字母就可以了
+class Solution {
+    public boolean isPalindrome(String s) {
+        int low = 0;
+        int high = s.length() - 1;
+        while(low <= high)
+        {
+            while(low < s.length() - 1 && Character.isLetterOrDigit(s.charAt(low)) == false)
+            {
+                low++;
+            }
+            while(high > 0 && Character.isLetterOrDigit(s.charAt(high)) == false)
+            {
+                high--;
+            }
+            char c1 = s.charAt(low);
+            char c2 = s.charAt(high);
+            if(Character.isLetter(c1) && Character.isLetter(c2))
+            {
+                c1 = Character.toLowerCase(c1);
+                c2 = Character.toLowerCase(c2);
+            }
+            if(high >= low)
+            {
+                if(c1 == c2)
+                {
+                    low++;
+                    high--;
+                }
+                else
+                    return false;
+            }
+        }
+        return true;
+    }
+}
+
+//题解更加简洁，注意left==right不用判断，left > right也不用判断
+public boolean isPalindrome(String s) {
+        int n = s.length();
+        int left = 0, right = n - 1;
+        while (left < right) {
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                ++left;
+            }
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                --right;
+            }
+            if (left < right) {
+                if (Character.toLowerCase(s.charAt(left)) != Character.toLowerCase(s.charAt(right))) {
+                    return false;
+                }
+                ++left;
+                --right;
+            }
+        }
+        return true;
+    }
+
+//其他想法：先筛选出要判断的字符串，再用双指针或者倒转数组看是否相同（倒转的思想）

@@ -1,0 +1,103 @@
+40.组合总和 II
+关键问题，数组元素不唯一，且得到的集合不能重复，而且集合不能去重。
+[1,1,6, 7] 8  --[1,1,6] [1,7] [1,7] 
+方法一通过hashset来记录是否使用了相同的数字，使用了则继续下一次循环
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        if(candidates == null || candidates.length == 0 || target <= 0)
+            return res;
+        Arrays.sort(candidates);
+        ArrayList<Integer> route = new ArrayList<>();
+        dfs(0, candidates, target, route);
+        return res;
+        
+    }
+    public void dfs(int start, int[] candidates, int target, List<Integer> route)
+    {
+        if(target < 0) return;
+        if(target == 0)
+        {
+            res.add(new ArrayList<>(route));
+            return;
+        }
+        HashSet<Integer> set = new HashSet<>();  
+        for(int i = start;i<candidates.length; i++)
+        {
+            if(set.contains(candidates[i]))
+                continue;
+            else set.add(candidates[i]);
+            if(target - candidates[i] < 0)
+                break;
+            route.add(candidates[i]);
+            dfs(i + 1, candidates, target - candidates[i], route);
+            route.remove(route.size() - 1);
+        }
+    }
+}
+
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        if(candidates == null || candidates.length == 0 || target <= 0)
+            return res;
+        Arrays.sort(candidates);
+        ArrayList<Integer> route = new ArrayList<>();
+        dfs(0, candidates, target, route);
+        return res;
+        
+    }
+    public void dfs(int start, int[] candidates, int target, List<Integer> route)
+    {
+        if(target < 0) return;
+        if(target == 0)
+        {
+            res.add(new ArrayList<>(route));
+            return;
+        }
+        for(int i = start;i<candidates.length; i++)
+        {
+            if(i > start && candidates[i] == candidates[i - 1])  //通过前后比较，找到第一个与前面不同的元素
+                continue;
+            if(target - candidates[i] < 0)
+                break;
+            route.add(candidates[i]);
+            dfs(i + 1, candidates, target - candidates[i], route);
+            route.remove(route.size() - 1);
+        }
+    }
+}
+
+
+class Solution {
+    List<List<Integer>> res = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        if(candidates == null || candidates.length == 0 || target <= 0)
+            return res;
+        Arrays.sort(candidates);
+        ArrayList<Integer> route = new ArrayList<>();
+        dfs(0, candidates, target, route);
+        return res;
+        
+    }
+    public void dfs(int start, int[] candidates, int target, List<Integer> route)
+    {
+        if(target < 0) return;
+        if(target == 0)
+        {
+            res.add(new ArrayList<>(route));
+            return;
+        }
+        for(int i = start;i<candidates.length; i++)
+        {
+            if(target - candidates[i] < 0)  //大剪枝在前面更好一点
+                break;
+            if(i > start && candidates[i] == candidates[i - 1])
+                continue;
+            route.add(candidates[i]);
+            dfs(i + 1, candidates, target - candidates[i], route);
+            route.remove(route.size() - 1);
+        }
+    }
+}

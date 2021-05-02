@@ -1,0 +1,21 @@
+70.爬楼梯
+定义一个状态数组
+状态有一定含义，或者直接就是最终答案，或者对于求最终答案有帮助（间接求）
+列出状态方程
+如果状态方程不好定义尝试重新定义状态
+初始条件(常常是数组有意义的边界)
+本题状态方程: dp[i] = dp[i-1] + dp[i-2]
+初始条件dp[0] = 1,dp[1] = 1;
+class Solution {
+    public int climbStairs(int n) {
+        if(n == 1) return 1;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for(int i = 2; i < dp.length; i++)
+        {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+}

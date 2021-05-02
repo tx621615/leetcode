@@ -1,0 +1,104 @@
+59. 螺旋矩阵 II
+一层层添加，迭代。因为rows=cols,rowe=cole因此只需要两个变量就可以了。
+n*n的矩阵，所以比较简单。（必然会有四列）
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        LinkedList<Integer> list = new LinkedList<>();
+        for(int i = 1;i <= n * n; i++)
+        {
+            list.add(i);
+        }
+        int rows = 0;
+        int rowe = n - 1;
+        while(rows < rowe)
+        {
+            for(int i = rows;i <= rowe; i++)
+            {
+                res[rows][i] = list.poll();
+            }
+            for(int i = rows+1;i <= rowe; i++)
+            {
+                res[i][rowe] = list.poll();
+            }
+            for(int i = rowe - 1;i >= rows; i--)
+            {
+                res[rowe][i] = list.poll();
+            }
+            for(int i = rowe - 1;i > rows; i--)
+            {
+                res[i][rows] = list.poll();
+            }
+            rows++;
+            rowe--;
+        }
+        if(rowe == rows) res[rows][rowe] = list.poll();
+        return res;
+    }
+}
+
+//只使用一个变量
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int count = 1;
+        int rows = 0;
+        int rowe = n - 1;
+        while(rows < rowe)
+        {
+            for(int i = rows;i <= rowe; i++)
+            {
+                res[rows][i] = count++;
+            }
+            for(int i = rows+1;i <= rowe; i++)
+            {
+                res[i][rowe] = count++;
+            }
+            for(int i = rowe - 1;i >= rows; i--)
+            {
+                res[rowe][i] = count++;
+            }
+            for(int i = rowe - 1;i > rows; i--)
+            {
+                res[i][rows] = count++;
+            }
+            rows++;
+            rowe--;
+        }
+        if(rowe == rows) res[rows][rowe] = count;
+        return res;
+    }
+}
+
+//使用++count效果更好
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int count = 0;
+        int rows = 0;
+        int rowe = n - 1;
+        while(rows < rowe)
+        {
+            for(int i = rows;i <= rowe; i++)
+            {
+                res[rows][i] = ++count;
+            }
+            for(int i = rows+1;i <= rowe; i++)
+            {
+                res[i][rowe] = ++count;
+            }
+            for(int i = rowe - 1;i >= rows; i--)
+            {
+                res[rowe][i] = ++count;
+            }
+            for(int i = rowe - 1;i > rows; i--)
+            {
+                res[i][rows] = ++count;
+            }
+            rows++;
+            rowe--;
+        }
+        if(rowe == rows) res[rows][rowe] = ++count;
+        return res;
+    }
+}

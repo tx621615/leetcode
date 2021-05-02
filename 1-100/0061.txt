@@ -1,0 +1,55 @@
+61. 旋转链表
+先对旋转求余，找出有效旋转，然后找到恰好移动到最后一个节点的节点p
+p.next为res的头结点，p.next=null原来末尾的节点rear指向head就完成了
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head == null) return head;
+        int length = 0;
+        ListNode p = head;
+        ListNode q = null;
+        while(p != null)
+        {
+            ++length;
+            q = p;
+            p = p.next;
+        }
+        k = k % length;
+        if(k == 0) return head;
+        p = head;
+        for(int i = 1;i < length - k;i++)
+        {
+            p = p.next;
+        }
+        ListNode res = p.next;
+        p.next = null;
+        q.next = head;
+        return res;
+    }
+}
+
+//先成环，然后断开，还是找最后一个移动到尾部的节点
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head == null || head.next == null) return head;
+        int length = 0;
+        ListNode p = head;
+        ListNode q = null;
+        while(p != null)
+        {
+            ++length;
+            q = p;
+            p = p.next;
+        }
+        k = k % length;
+        if(k == 0) return head;
+        q.next = head;
+        int add = length - k;
+        for(int i = 1;i < add;i++)
+        {
+            head = head.next;
+        }
+        p = head.next;
+        head.next = null;
+        return p;
+    }
+}
